@@ -1,5 +1,4 @@
 import { Authenticated, Unauthenticated } from "convex/react";
-import { api } from "../convex/_generated/api";
 import { SignInForm } from "./SignInForm";
 import { SignOutButton } from "./SignOutButton";
 import { Toaster } from "sonner";
