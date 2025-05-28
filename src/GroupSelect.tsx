@@ -13,12 +13,9 @@ export function GroupSelect({
 }) {
   const groups = useQuery(api.groups.listMyGroups);
   const createGroup = useMutation(api.groups.create);
-  const inviteToGroup = useMutation(api.groups.invite);
   
   const [showNewGroup, setShowNewGroup] = useState(false);
   const [newGroupName, setNewGroupName] = useState("");
-  const [showInvite, setShowInvite] = useState(false);
-  const [inviteEmail, setInviteEmail] = useState("");
 
   if (!groups) return null;
 
@@ -32,23 +29,6 @@ export function GroupSelect({
       toast.success("Group created!");
     } catch (error) {
       toast.error("Failed to create group");
-    }
-  };
-
-  const handleInvite = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!selectedGroupId) return;
-    
-    try {
-      await inviteToGroup({ 
-        groupId: selectedGroupId, 
-        email: inviteEmail 
-      });
-      setInviteEmail("");
-      setShowInvite(false);
-      toast.success("Invitation sent!");
-    } catch (error) {
-      toast.error("Failed to invite user");
     }
   };
 
@@ -119,54 +99,10 @@ export function GroupSelect({
                   {group.members.length} member{group.members.length !== 1 ? "s" : ""}
                 </p>
               </div>
-              {selectedGroupId === group._id && group.role === "admin" && (
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setShowInvite(true);
-                  }}
-                  className="text-sm text-primary hover:text-primary-hover"
-                >
-                  Invite
-                </button>
-              )}
             </div>
           </div>
         ))}
       </div>
-
-      {showInvite && selectedGroupId && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center">
-          <form onSubmit={handleInvite} className="bg-white p-6 rounded-lg shadow-xl">
-            <h3 className="text-lg font-medium mb-4">Invite to Group</h3>
-            <div className="space-y-4">
-              <input
-                type="email"
-                value={inviteEmail}
-                onChange={(e) => setInviteEmail(e.target.value)}
-                placeholder="Email address"
-                className="w-full px-3 py-2 border rounded-md"
-              />
-              <div className="flex gap-2">
-                <button
-                  type="submit"
-                  disabled={!inviteEmail}
-                  className="flex-1 px-4 py-2 bg-primary text-white rounded-md hover:bg-primary-hover disabled:opacity-50"
-                >
-                  Send Invite
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setShowInvite(false)}
-                  className="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300"
-                >
-                  Cancel
-                </button>
-              </div>
-            </div>
-          </form>
-        </div>
-      )}
     </div>
   );
 }
