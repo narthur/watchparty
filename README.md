@@ -1,20 +1,20 @@
 # Movie Voting App Implementation
-  
+
 This is a project built with [Chef](https://chef.convex.dev) using [Convex](https://convex.dev) as its backend.
-  
+
 This project is connected to the Convex deployment named [`friendly-sandpiper-195`](https://dashboard.convex.dev/d/friendly-sandpiper-195).
-  
+
 ## Project structure
-  
+
 The frontend code is in the `app` directory and is built with [Vite](https://vitejs.dev/).
-  
+
 The backend code is in the `convex` directory.
-  
+
 `npm run dev` will start the frontend and backend servers.
 
 ## App authentication
 
-Chef apps use [Convex Auth](https://auth.convex.dev/) with Anonymous auth for easy sign in. You may wish to change this before deploying your app.
+Chef apps use [Convex Auth](https://auth.convex.dev/).
 
 ## Developing and deploying your app
 

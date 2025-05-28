@@ -38,11 +38,11 @@ export const invite = mutation({
     // Check if user is admin
     const membership = await ctx.db
       .query("groupMembers")
-      .withIndex("by_user_and_group", q => 
-        q.eq("userId", userId).eq("groupId", args.groupId)
+      .withIndex("by_user_and_group", (q) =>
+        q.eq("userId", userId).eq("groupId", args.groupId),
       )
       .unique();
-    
+
     if (!membership || membership.role !== "admin") {
       throw new Error("Not authorized");
     }
@@ -50,7 +50,7 @@ export const invite = mutation({
     // Find user by email
     const invitedUser = await ctx.db
       .query("users")
-      .withIndex("email", q => q.eq("email", args.email))
+      .withIndex("email", (q) => q.eq("email", args.email))
       .unique();
 
     if (!invitedUser) {
@@ -60,8 +60,8 @@ export const invite = mutation({
     // Check if already a member
     const existingMembership = await ctx.db
       .query("groupMembers")
-      .withIndex("by_user_and_group", q => 
-        q.eq("userId", invitedUser._id).eq("groupId", args.groupId)
+      .withIndex("by_user_and_group", (q) =>
+        q.eq("userId", invitedUser._id).eq("groupId", args.groupId),
       )
       .unique();
 
@@ -85,17 +85,17 @@ export const listMyGroups = query({
 
     const memberships = await ctx.db
       .query("groupMembers")
-      .withIndex("by_user", q => q.eq("userId", userId))
+      .withIndex("by_user", (q) => q.eq("userId", userId))
       .collect();
 
     return await Promise.all(
       memberships.map(async (membership) => {
         const group = await ctx.db.get(membership.groupId);
         if (!group) throw new Error("Group not found");
-        
+
         const members = await ctx.db
           .query("groupMembers")
-          .withIndex("by_group", q => q.eq("groupId", group._id))
+          .withIndex("by_group", (q) => q.eq("groupId", group._id))
           .collect();
 
         const memberDetails = await Promise.all(
@@ -103,10 +103,10 @@ export const listMyGroups = query({
             const user = await ctx.db.get(m.userId);
             return {
               userId: m.userId,
-              name: user?.name || user?.email || "Anonymous User",
+              name: user?.name || user?.email,
               role: m.role,
             };
-          })
+          }),
         );
 
         return {
@@ -115,7 +115,7 @@ export const listMyGroups = query({
           role: membership.role,
           members: memberDetails,
         };
-      })
+      }),
     );
   },
 });

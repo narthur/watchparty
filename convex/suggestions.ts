@@ -16,15 +16,15 @@ export const suggest = mutation({
     // Check if user is member of group
     const membership = await ctx.db
       .query("groupMembers")
-      .withIndex("by_user_and_group", q => 
-        q.eq("userId", userId).eq("groupId", args.groupId)
+      .withIndex("by_user_and_group", (q) =>
+        q.eq("userId", userId).eq("groupId", args.groupId),
       )
       .unique();
 
     if (!membership) {
       throw new Error("Not a member of this group");
     }
-    
+
     return await ctx.db.insert("suggestions", {
       ...args,
       suggestedBy: userId,
@@ -47,8 +47,8 @@ export const vote = mutation({
 
     const membership = await ctx.db
       .query("groupMembers")
-      .withIndex("by_user_and_group", q => 
-        q.eq("userId", userId).eq("groupId", suggestion.groupId)
+      .withIndex("by_user_and_group", (q) =>
+        q.eq("userId", userId).eq("groupId", suggestion.groupId),
       )
       .unique();
 
@@ -58,8 +58,8 @@ export const vote = mutation({
 
     const existing = await ctx.db
       .query("votes")
-      .withIndex("by_user_and_suggestion", q => 
-        q.eq("userId", userId).eq("suggestionId", args.suggestionId)
+      .withIndex("by_user_and_suggestion", (q) =>
+        q.eq("userId", userId).eq("suggestionId", args.suggestionId),
       )
       .unique();
 
@@ -87,8 +87,8 @@ export const list = query({
     // Check if user is member of group
     const membership = await ctx.db
       .query("groupMembers")
-      .withIndex("by_user_and_group", q => 
-        q.eq("userId", userId).eq("groupId", args.groupId)
+      .withIndex("by_user_and_group", (q) =>
+        q.eq("userId", userId).eq("groupId", args.groupId),
       )
       .unique();
 
@@ -98,27 +98,30 @@ export const list = query({
 
     const suggestions = await ctx.db
       .query("suggestions")
-      .withIndex("by_group", q => q.eq("groupId", args.groupId))
+      .withIndex("by_group", (q) => q.eq("groupId", args.groupId))
       .collect();
 
     const results = await Promise.all(
       suggestions.map(async (suggestion) => {
         const votes = await ctx.db
           .query("votes")
-          .withIndex("by_suggestion", q => q.eq("suggestionId", suggestion._id))
+          .withIndex("by_suggestion", (q) =>
+            q.eq("suggestionId", suggestion._id),
+          )
           .collect();
 
-        const myVote = votes.find(v => v.userId === userId)?.vote;
-        
+        const myVote = votes.find((v) => v.userId === userId)?.vote;
+
         const selectedUserIds = args.selectedUserIds ?? [];
-        const relevantVotes = selectedUserIds.length > 0
-          ? votes.filter(v => selectedUserIds.includes(v.userId))
-          : votes;
+        const relevantVotes =
+          selectedUserIds.length > 0
+            ? votes.filter((v) => selectedUserIds.includes(v.userId))
+            : votes;
 
         const voteCount = {
-          want: relevantVotes.filter(v => v.vote === "want").length,
-          fine: relevantVotes.filter(v => v.vote === "fine").length,
-          dont_want: relevantVotes.filter(v => v.vote === "dont_want").length,
+          want: relevantVotes.filter((v) => v.vote === "want").length,
+          fine: relevantVotes.filter((v) => v.vote === "fine").length,
+          dont_want: relevantVotes.filter((v) => v.vote === "dont_want").length,
         };
 
         const voters = await Promise.all(
@@ -126,10 +129,10 @@ export const list = query({
             const user = await ctx.db.get(vote.userId);
             return {
               userId: vote.userId,
-              name: user?.name || user?.email || "Anonymous User",
+              name: user?.name || user?.email,
               vote: vote.vote,
             };
-          })
+          }),
         );
 
         return {
@@ -138,7 +141,7 @@ export const list = query({
           voteCount,
           voters,
         };
-      })
+      }),
     );
 
     return results.sort((a, b) => {
@@ -161,8 +164,8 @@ export const listGroupMembers = query({
     // Check if user is member of group
     const membership = await ctx.db
       .query("groupMembers")
-      .withIndex("by_user_and_group", q => 
-        q.eq("userId", userId).eq("groupId", args.groupId)
+      .withIndex("by_user_and_group", (q) =>
+        q.eq("userId", userId).eq("groupId", args.groupId),
       )
       .unique();
 
@@ -172,7 +175,7 @@ export const listGroupMembers = query({
 
     const members = await ctx.db
       .query("groupMembers")
-      .withIndex("by_group", q => q.eq("groupId", args.groupId))
+      .withIndex("by_group", (q) => q.eq("groupId", args.groupId))
       .collect();
 
     return Promise.all(
@@ -180,10 +183,10 @@ export const listGroupMembers = query({
         const user = await ctx.db.get(member.userId);
         return {
           _id: member.userId,
-          name: user?.name || user?.email || "Anonymous User",
+          name: user?.name || user?.email,
           role: member.role,
         };
-      })
+      }),
     );
   },
 });
