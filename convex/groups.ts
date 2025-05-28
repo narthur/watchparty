@@ -50,7 +50,7 @@ export const invite = mutation({
     // Find user by email
     const invitedUser = await ctx.db
       .query("users")
-      .withIndex("email", (q) => q.eq("email", args.email))
+      .withIndex("email", (q) => q.eq("email", args.email.toLowerCase()))
       .unique();
 
     if (!invitedUser) {
