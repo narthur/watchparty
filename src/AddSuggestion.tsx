@@ -36,14 +36,14 @@ export function AddSuggestion({ groupId }: { groupId: Id<"groups"> }) {
       <div className="space-y-4">
         <div className="flex content-center space-x-4">
           <div className="flex-1">
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="block mb-2 text-sm font-medium text-gray-700">
               Title
             </label>
             <input
               type="text"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm"
+              className="mt-1 p-2 block w-full rounded-md border border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm"
               required
             />
           </div>
@@ -80,13 +80,13 @@ export function AddSuggestion({ groupId }: { groupId: Id<"groups"> }) {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700">
+          <label className="block mb-2 text-sm font-medium text-gray-700">
             Description (optional)
           </label>
           <textarea
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            className="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm"
+            className="mt-1 p-2  block w-full rounded-md border border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm"
             rows={3}
           />
         </div>
