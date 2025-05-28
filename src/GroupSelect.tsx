@@ -13,7 +13,7 @@ export function GroupSelect({
 }) {
   const groups = useQuery(api.groups.listMyGroups);
   const createGroup = useMutation(api.groups.create);
-  
+
   const [showNewGroup, setShowNewGroup] = useState(false);
   const [newGroupName, setNewGroupName] = useState("");
 
@@ -32,18 +32,11 @@ export function GroupSelect({
     }
   };
 
-  const selectedGroup = groups.find(g => g._id === selectedGroupId);
-
   return (
     <div className="bg-white p-6 rounded-lg shadow">
       <div className="flex justify-between items-start mb-6">
         <div>
           <h2 className="text-2xl font-semibold mb-2">Your Groups</h2>
-          {selectedGroup && (
-            <p className="text-gray-600">
-              Currently viewing: {selectedGroup.name}
-            </p>
-          )}
         </div>
         <button
           onClick={() => setShowNewGroup(true)}
@@ -96,7 +89,8 @@ export function GroupSelect({
               <div>
                 <h3 className="font-medium">{group.name}</h3>
                 <p className="text-sm text-gray-500">
-                  {group.members.length} member{group.members.length !== 1 ? "s" : ""}
+                  {group.members.length} member
+                  {group.members.length !== 1 ? "s" : ""}
                 </p>
               </div>
             </div>
