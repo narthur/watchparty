@@ -1,20 +1,17 @@
 import { Authenticated, Unauthenticated } from "convex/react";
 import { SignInForm } from "./SignInForm";
-import { SignOutButton } from "./SignOutButton";
 import { Toaster } from "sonner";
 import { GroupSelect } from "./GroupSelect";
 import { useState } from "react";
 import { Id } from "../convex/_generated/dataModel";
 import { GroupView } from "./GroupView";
-import { Routes, Route, Link, useParams, Outlet } from "react-router";
+import { Routes, Route, Link, useParams } from "react-router";
+import { Navbar } from "./Navbar";
 
 export default function App() {
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
-      <header className="sticky top-0 z-10 bg-white/80 backdrop-blur-sm h-16 flex justify-between items-center border-b shadow-sm px-4">
-        <Link to="/" className="text-xl font-semibold text-primary">Watch Party</Link>
-        <SignOutButton />
-      </header>
+      <Navbar />
       <main className="flex-1 flex flex-col items-center p-8">
         <div className="w-full max-w-3xl mx-auto">
           <Routes>
