@@ -45,15 +45,31 @@ export function AddSuggestion({ groupId }: { groupId: Id<"groups"> }) {
         </div>
         
         <div>
-          <label className="block text-sm font-medium text-gray-700">Type</label>
-          <select
-            value={type}
-            onChange={(e) => setType(e.target.value as "movie" | "tv")}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm"
-          >
-            <option value="movie">Movie</option>
-            <option value="tv">TV Show</option>
-          </select>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Type</label>
+          <div className="flex rounded-md shadow-sm overflow-hidden">
+            <button 
+              type="button"
+              onClick={() => setType("movie")}
+              className={`flex-1 py-2 px-4 font-medium text-sm ${
+                type === "movie" 
+                  ? "bg-primary text-white" 
+                  : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+              }`}
+            >
+              Movie
+            </button>
+            <button 
+              type="button"
+              onClick={() => setType("tv")}
+              className={`flex-1 py-2 px-4 font-medium text-sm ${
+                type === "tv" 
+                  ? "bg-primary text-white" 
+                  : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+              }`}
+            >
+              TV Show
+            </button>
+          </div>
         </div>
         
         <div>
