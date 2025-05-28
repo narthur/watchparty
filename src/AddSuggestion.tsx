@@ -8,33 +8,38 @@ export function AddSuggestion({ groupId }: { groupId: Id<"groups"> }) {
   const [title, setTitle] = useState("");
   const [type, setType] = useState<"movie" | "tv">("movie");
   const [description, setDescription] = useState("");
-  
+
   const suggest = useMutation(api.suggestions.suggest);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    try {
-      await suggest({ 
-        groupId,
-        title, 
-        type, 
-        description: description || undefined 
+    suggest({
+      groupId,
+      title,
+      type,
+      description: description || undefined,
+    })
+      .then(() => {
+        setTitle("");
+        setType("movie");
+        setDescription("");
+        toast.success("Added suggestion!");
+      })
+      .catch(() => {
+        toast.error("Failed to add suggestion");
       });
-      setTitle("");
-      setType("movie");
-      setDescription("");
-      toast.success("Added suggestion!");
-    } catch (error) {
-      toast.error("Failed to add suggestion");
-    }
   };
 
   return (
     <form onSubmit={handleSubmit} className="bg-white p-6 rounded-lg shadow">
-      <h2 className="text-2xl font-semibold mb-4">Suggest Something to Watch</h2>
+      <h2 className="text-2xl font-semibold mb-4">
+        Suggest Something to Watch
+      </h2>
       <div className="space-y-4">
         <div>
-          <label className="block text-sm font-medium text-gray-700">Title</label>
+          <label className="block text-sm font-medium text-gray-700">
+            Title
+          </label>
           <input
             type="text"
             value={title}
@@ -43,27 +48,29 @@ export function AddSuggestion({ groupId }: { groupId: Id<"groups"> }) {
             required
           />
         </div>
-        
+
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">Type</label>
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            Type
+          </label>
           <div className="flex rounded-md shadow-sm overflow-hidden">
-            <button 
+            <button
               type="button"
               onClick={() => setType("movie")}
               className={`flex-1 py-2 px-4 font-medium text-sm ${
-                type === "movie" 
-                  ? "bg-primary text-white" 
+                type === "movie"
+                  ? "bg-primary text-white"
                   : "bg-gray-100 text-gray-700 hover:bg-gray-200"
               }`}
             >
               Movie
             </button>
-            <button 
+            <button
               type="button"
               onClick={() => setType("tv")}
               className={`flex-1 py-2 px-4 font-medium text-sm ${
-                type === "tv" 
-                  ? "bg-primary text-white" 
+                type === "tv"
+                  ? "bg-primary text-white"
                   : "bg-gray-100 text-gray-700 hover:bg-gray-200"
               }`}
             >
@@ -71,7 +78,7 @@ export function AddSuggestion({ groupId }: { groupId: Id<"groups"> }) {
             </button>
           </div>
         </div>
-        
+
         <div>
           <label className="block text-sm font-medium text-gray-700">
             Description (optional)
