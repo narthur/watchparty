@@ -60,7 +60,6 @@ function HomePage() {
               }
             }}
           />
-          {selectedGroupId && <GroupView groupId={selectedGroupId} />}
         </div>
       </Authenticated>
     </div>
@@ -73,7 +72,7 @@ function GroupPage() {
     groupId: groupId as Id<"groups">,
   });
   const inviteToGroup = useMutation(api.groups.invite);
-  
+
   const [showInvite, setShowInvite] = useState(false);
   const [inviteEmail, setInviteEmail] = useState("");
 
@@ -84,9 +83,9 @@ function GroupPage() {
   const handleInvite = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await inviteToGroup({ 
-        groupId: groupId as Id<"groups">, 
-        email: inviteEmail 
+      await inviteToGroup({
+        groupId: groupId as Id<"groups">,
+        email: inviteEmail,
       });
       setInviteEmail("");
       setShowInvite(false);
@@ -123,8 +122,13 @@ function GroupPage() {
 
       {showInvite && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <form onSubmit={handleInvite} className="bg-white p-6 rounded-lg shadow-xl w-full max-w-md">
-            <h3 className="text-lg font-medium mb-4">Invite to {group?.name}</h3>
+          <form
+            onSubmit={handleInvite}
+            className="bg-white p-6 rounded-lg shadow-xl w-full max-w-md"
+          >
+            <h3 className="text-lg font-medium mb-4">
+              Invite to {group?.name}
+            </h3>
             <div className="space-y-4">
               <input
                 type="email"
