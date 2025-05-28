@@ -7,6 +7,8 @@ import { Id } from "../convex/_generated/dataModel";
 import { GroupView } from "./GroupView";
 import { Routes, Route, Link, useParams } from "react-router";
 import { Navbar } from "./Navbar";
+import { useQuery } from "convex/react";
+import { api } from "../convex/_generated/api";
 
 export default function App() {
   return (
@@ -66,18 +68,25 @@ function HomePage() {
 
 function GroupPage() {
   const { groupId } = useParams<{ groupId: string }>();
-  
+  const group = useQuery(api.groups.getGroup, {
+    groupId: groupId as Id<"groups">,
+  });
+
   if (!groupId) {
     return <div>Group not found</div>;
   }
 
   return (
     <div className="flex flex-col gap-8">
-      <div className="flex items-center gap-4">
-        <Link to="/" className="text-primary hover:underline">← Back to Home</Link>
-        <h2 className="text-2xl font-bold">Group Details</h2>
+      <div className="gap-4">
+        <Link to="/" className="text-primary hover:underline">
+          ← Back to Home
+        </Link>
+        <h2 className="text-2xl font-bold">
+          {group ? group.name : "Loading group..."}
+        </h2>
       </div>
-      
+
       <GroupView groupId={groupId as Id<"groups">} />
     </div>
   );

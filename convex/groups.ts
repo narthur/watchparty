@@ -119,3 +119,51 @@ export const listMyGroups = query({
     );
   },
 });
+
+export const getGroup = query({
+  args: {
+    groupId: v.id("groups"),
+  },
+  handler: async (ctx, args) => {
+    const userId = await getAuthUserId(ctx);
+    if (!userId) throw new Error("Not authenticated");
+
+    // Check if user is a member of this group
+    const membership = await ctx.db
+      .query("groupMembers")
+      .withIndex("by_user_and_group", (q) =>
+        q.eq("userId", userId).eq("groupId", args.groupId),
+      )
+      .unique();
+
+    if (!membership) {
+      throw new Error("Not authorized to view this group");
+    }
+
+    const group = await ctx.db.get(args.groupId);
+    if (!group) throw new Error("Group not found");
+
+    const members = await ctx.db
+      .query("groupMembers")
+      .withIndex("by_group", (q) => q.eq("groupId", args.groupId))
+      .collect();
+
+    const memberDetails = await Promise.all(
+      members.map(async (m) => {
+        const user = await ctx.db.get(m.userId);
+        return {
+          userId: m.userId,
+          name: user?.name || user?.email,
+          role: m.role,
+        };
+      }),
+    );
+
+    return {
+      _id: group._id,
+      name: group.name,
+      role: membership.role,
+      members: memberDetails,
+    };
+  },
+});
