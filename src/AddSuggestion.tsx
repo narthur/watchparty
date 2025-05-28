@@ -32,50 +32,50 @@ export function AddSuggestion({ groupId }: { groupId: Id<"groups"> }) {
 
   return (
     <form onSubmit={handleSubmit} className="bg-white p-6 rounded-lg shadow">
-      <h2 className="text-2xl font-semibold mb-4">
-        Suggest Something to Watch
-      </h2>
+      <h2 className="text-xl font-semibold mb-4">Suggest Something to Watch</h2>
       <div className="space-y-4">
-        <div>
-          <label className="block text-sm font-medium text-gray-700">
-            Title
-          </label>
-          <input
-            type="text"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm"
-            required
-          />
-        </div>
+        <div className="flex content-center space-x-4">
+          <div className="flex-1">
+            <label className="block text-sm font-medium text-gray-700">
+              Title
+            </label>
+            <input
+              type="text"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm"
+              required
+            />
+          </div>
 
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            Type
-          </label>
-          <div className="flex rounded-md shadow-sm overflow-hidden">
-            <button
-              type="button"
-              onClick={() => setType("movie")}
-              className={`flex-1 py-2 px-4 font-medium text-sm ${
-                type === "movie"
-                  ? "bg-primary text-white"
-                  : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-              }`}
-            >
-              Movie
-            </button>
-            <button
-              type="button"
-              onClick={() => setType("tv")}
-              className={`flex-1 py-2 px-4 font-medium text-sm ${
-                type === "tv"
-                  ? "bg-primary text-white"
-                  : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-              }`}
-            >
-              TV Show
-            </button>
+          <div className="basis-auto flex-shrink-0">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Type
+            </label>
+            <div className="flex rounded-md shadow-sm overflow-hidden">
+              <button
+                type="button"
+                onClick={() => setType("movie")}
+                className={`flex-1 py-2 px-4 font-medium text-sm basis-auto ${
+                  type === "movie"
+                    ? "bg-primary text-white"
+                    : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                }`}
+              >
+                Movie
+              </button>
+              <button
+                type="button"
+                onClick={() => setType("tv")}
+                className={`flex-1 py-2 px-4 font-medium text-sm basis-auto ${
+                  type === "tv"
+                    ? "bg-primary text-white"
+                    : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                }`}
+              >
+                TV Show
+              </button>
+            </div>
           </div>
         </div>
 
